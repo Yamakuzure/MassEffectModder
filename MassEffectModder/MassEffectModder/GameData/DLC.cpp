@@ -28,7 +28,7 @@
 #include <Wrappers.h>
 #include <Misc/Misc.h>
 
-int ME3DLC::getNumberOfFiles(QString &path)
+auto ME3DLC::getNumberOfFiles(QString &path) -> int
 {
     if (!QFile(path).exists())
     {
@@ -54,7 +54,7 @@ int ME3DLC::getNumberOfFiles(QString &path)
     return stream.ReadInt32();
 }
 
-bool ME3DLC::loadHeader(Stream *stream)
+auto ME3DLC::loadHeader(Stream *stream) -> bool
 {
     uint tag = stream->ReadUInt32();
     if (tag != SfarTag)
@@ -143,9 +143,9 @@ bool ME3DLC::loadHeader(Stream *stream)
     return true;
 }
 
-bool ME3DLC::extract(QString &SFARfilename, int &currentProgress,
+auto ME3DLC::extract(QString &SFARfilename, int &currentProgress,
                      int totalNumber, ProgressCallback callback,
-                     void *callbackHandle)
+                     void *callbackHandle) -> bool
 {
     if (!QFile(SFARfilename).exists())
     {

@@ -101,7 +101,7 @@ void Properties::getProperty(quint8 *data, int offset)
         getProperty(data, nextOffset);
 }
 
-Properties::PropertyEntry Properties::getProperty(const QString &name)
+auto Properties::getProperty(const QString &name) -> Properties::PropertyEntry
 {
     fetchValue(name);
     for (int i = 0; i < propertyList.count(); i++)
@@ -181,7 +181,7 @@ void Properties::fetchValue(int index)
     propertyList[index] = property;
 }
 
-QString Properties::getDisplayString(int index)
+auto Properties::getDisplayString(int index) -> QString
 {
     QString result = "";
     if (index < 0 || index >= propertyList.count())
@@ -235,7 +235,7 @@ QString Properties::getDisplayString(int index)
     return result;
 }
 
-bool Properties::exists(const QString &name)
+auto Properties::exists(const QString &name) -> bool
 {
     for (int i = 0; i < propertyList.count(); i++)
     {
@@ -591,7 +591,7 @@ void Properties::setStructValue(const QString &name, const QString &valueName, B
         propertyList.push_front(property);
 }
 
-ByteBuffer Properties::toArray()
+auto Properties::toArray() -> ByteBuffer
 {
     MemoryStream mem;
     mem.WriteUInt32(headerData);

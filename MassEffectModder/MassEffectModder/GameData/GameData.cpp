@@ -25,7 +25,7 @@
 
 MeType GameData::gameType = UNKNOWN_TYPE;
 
-bool comparePath(const QString &e1, const QString &e2)
+auto comparePath(const QString &e1, const QString &e2) -> bool
 {
     return AsciiStringCompareCaseIgnore(e1, e2) < 0;
 }
@@ -529,7 +529,7 @@ void GameData::InternalInit(MeType type, ConfigIni &configIni)
     }
 }
 
-const QString GameData::bioGamePath()
+auto GameData::bioGamePath() -> const QString
 {
     if (_path.length() == 0)
         CRASH_MSG("Game path not set!");
@@ -548,7 +548,7 @@ const QString GameData::bioGamePath()
     CRASH();
 }
 
-const QString GameData::MainData()
+auto GameData::MainData() -> const QString
 {
     switch (gameType)
     {
@@ -564,7 +564,7 @@ const QString GameData::MainData()
     CRASH();
 }
 
-const QString GameData::DLCData()
+auto GameData::DLCData() -> const QString
 {
     if (_path.length() == 0)
         CRASH_MSG("Game path not set!");
@@ -583,7 +583,7 @@ const QString GameData::DLCData()
     CRASH();
 }
 
-const QString GameData::DLCDataSuffix()
+auto GameData::DLCDataSuffix() -> const QString
 {
     switch (gameType)
     {
@@ -599,7 +599,7 @@ const QString GameData::DLCDataSuffix()
     CRASH();
 }
 
-const QString GameData::GameExePath()
+auto GameData::GameExePath() -> const QString
 {
     if (_path.length() == 0)
         CRASH_MSG("Game path not set!");
@@ -619,7 +619,7 @@ const QString GameData::GameExePath()
     CRASH();
 }
 
-const QString GameData::GameUserPath(MeType type)
+auto GameData::GameUserPath(MeType type) -> const QString
 {
 #if defined(_WIN32)
     QString path = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).first() + "/BioWare/Mass Effect";
@@ -638,7 +638,7 @@ const QString GameData::GameUserPath(MeType type)
     return path;
 }
 
-const QString GameData::ConfigIniPath(MeType type)
+auto GameData::ConfigIniPath(MeType type) -> const QString
 {
     QString path = GameUserPath(type);
     if (path == "")
@@ -657,7 +657,7 @@ const QString GameData::ConfigIniPath(MeType type)
     CRASH();
 }
 
-const QString GameData::EngineConfigIniPath(MeType type)
+auto GameData::EngineConfigIniPath(MeType type) -> const QString
 {
     QString path = ConfigIniPath(type);
     if (path == "")
@@ -676,7 +676,7 @@ const QString GameData::EngineConfigIniPath(MeType type)
     CRASH();
 }
 
-const QString GameData::RelativeGameData(const QString &path)
+auto GameData::RelativeGameData(const QString &path) -> const QString
 {
     if (_path.length() == 0)
         CRASH_MSG("Game path not set!");
@@ -703,7 +703,7 @@ void GameData::ClosePackagesList()
 
 GameData *g_GameData;
 
-bool CreateGameData()
+auto CreateGameData() -> bool
 {
     g_GameData = new GameData();
     if (g_GameData == nullptr)

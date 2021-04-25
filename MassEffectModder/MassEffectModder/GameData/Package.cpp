@@ -50,12 +50,12 @@ Package::~Package()
     delete packageStream;
 }
 
-bool Package::isName(int id)
+auto Package::isName(int id) -> bool
 {
     return id >= 0 && id < namesTable.count();
 }
 
-QString Package::getClassName(int id)
+auto Package::getClassName(int id) -> QString
 {
     if (id > 0 && id < exportsTable.count())
         return exportsTable[id - 1].objectName;
@@ -64,7 +64,7 @@ QString Package::getClassName(int id)
     return "Class";
 }
 
-int Package::getClassNameId(int id)
+auto Package::getClassNameId(int id) -> int
 {
     if (id > 0 && id < exportsTable.count())
         return exportsTable[id - 1].getObjectNameId();
@@ -73,7 +73,7 @@ int Package::getClassNameId(int id)
     return 0;
 }
 
-QString Package::resolvePackagePath(int id)
+auto Package::resolvePackagePath(int id) -> QString
 {
     QString s = "";
     if (id > 0 && id < exportsTable.count())
@@ -93,7 +93,7 @@ QString Package::resolvePackagePath(int id)
     return s;
 }
 
-int Package::Open(const QString &filename, bool headerOnly, bool fullLoad)
+auto Package::Open(const QString &filename, bool headerOnly, bool fullLoad) -> int
 {
     packagePath = g_GameData->RelativeGameData(filename);
 
@@ -248,7 +248,7 @@ int Package::Open(const QString &filename, bool headerOnly, bool fullLoad)
     return 0;
 }
 
-bool Package::getData(uint offset, uint length, Stream *outputStream, quint8 *outputBuffer)
+auto Package::getData(uint offset, uint length, Stream *outputStream, quint8 *outputBuffer) -> bool
 {
     if (getCompressedFlag())
     {
@@ -377,7 +377,7 @@ bool Package::getData(uint offset, uint length, Stream *outputStream, quint8 *ou
     return true;
 }
 
-ByteBuffer Package::getExportData(int id)
+auto Package::getExportData(int id) -> ByteBuffer
 {
     ExportEntry& exp = exportsTable[id];
     uint length = exp.getDataSize();
@@ -424,7 +424,7 @@ void Package::MoveExportDataToEnd(int id)
     modified = true;
 }
 
-static bool compareExportsDataOffset(Package::ExportEntry &e1, Package::ExportEntry &e2)
+static auto compareExportsDataOffset(Package::ExportEntry &e1, Package::ExportEntry &e2) -> bool
 {
     return e1.getDataOffset() < e2.getDataOffset();
 }
@@ -435,7 +435,7 @@ void Package::SortExportsTableByDataOffset(const QList<ExportEntry> &list, QList
     std::sort(sortedExports.begin(), sortedExports.end(), compareExportsDataOffset);
 }
 
-bool Package::ReserveSpaceBeforeExportData(int space)
+auto Package::ReserveSpaceBeforeExportData(int space) -> bool
 {
     QList<ExportEntry> sortedExports;
     SortExportsTableByDataOffset(exportsTable, sortedExports);
@@ -479,7 +479,7 @@ bool Package::ReserveSpaceBeforeExportData(int space)
     return false;
 }
 
-const QString Package::StorageTypeToString(StorageTypes type)
+auto Package::StorageTypeToString(StorageTypes type) -> const QString
 {
     switch (type)
     {
@@ -502,7 +502,7 @@ const QString Package::StorageTypeToString(StorageTypes type)
     }
 }
 
-int Package::getNameId(const QString &name)
+auto Package::getNameId(const QString &name) -> int
 {
     for (int i = 0; i < namesTable.count(); i++)
     {
@@ -512,7 +512,7 @@ int Package::getNameId(const QString &name)
     CRASH();
 }
 
-bool Package::existsNameId(const QString &name)
+auto Package::existsNameId(const QString &name) -> bool
 {
     for (int i = 0; i < namesTable.count(); i++)
     {
@@ -522,14 +522,14 @@ bool Package::existsNameId(const QString &name)
     return false;
 }
 
-QString Package::getName(int id)
+auto Package::getName(int id) -> QString
 {
     if (id >= namesTable.count())
         CRASH();
     return namesTable[id].name;
 }
 
-int Package::addName(const QString &name)
+auto Package::addName(const QString &name) -> int
 {
     if (existsNameId(name))
         CRASH();
@@ -865,7 +865,7 @@ void Package::saveGuids(Stream &output)
     }
 }
 
-bool Package::SaveToFile(bool forceCompressed, bool forceDecompressed, bool appendMarker)
+auto Package::SaveToFile(bool forceCompressed, bool forceDecompressed, bool appendMarker) -> bool
 {
     if (packageFileVersion == packageFileVersionME1)
         forceCompressed = false;
@@ -1224,7 +1224,7 @@ void Package::ReleaseChunks()
     chunks.clear();
 }
 
-const ByteBuffer Package::compressData(const ByteBuffer &inputData, StorageTypes type, bool maxCompress)
+auto Package::compressData(const ByteBuffer &inputData, StorageTypes type, bool maxCompress) -> const ByteBuffer
 {
     MemoryStream ouputStream;
     qint64 compressedSize = 0;
@@ -1296,8 +1296,8 @@ const ByteBuffer Package::compressData(const ByteBuffer &inputData, StorageTypes
     return ouputStream.ToArray();
 }
 
-const ByteBuffer Package::decompressData(Stream &stream, StorageTypes type,
-                                         int uncompressedSize, int compressedSize)
+auto Package::decompressData(Stream &stream, StorageTypes type,
+                                         int uncompressedSize, int compressedSize) -> const ByteBuffer
 {
     auto data = ByteBuffer(uncompressedSize);
     uint blockTag = stream.ReadUInt32();
