@@ -86,8 +86,30 @@ void TextureProperty::getProperty(quint8 *data, int offset)
             else
                 size = 4;
         }
-        else
-            CRASH("");
+        else {
+            std::string err_str( "Unknown texture property type: \"" + texProperty.type.toStdString() + "\"" );
+            qulonglong data_p = (qulonglong)(data);
+
+            if (g_ipc)
+            {
+                ConsoleWrite(QString("[IPC]ERROR_INVALID_PROPERTY %1").arg(texProperty.name));
+                ConsoleWrite(QString("[IPC]ERROR_UNKNOWN_TYPE %1").arg(texProperty.type));
+                ConsoleWrite(QString("[IPC]DEBUG address 0x%1 (%2)").arg(data_p, 8, 16, QChar('0')).arg(data_p));
+                ConsoleWrite(QString("[IPC]DEBUG offset  0x%1 (%2)").arg(offset, 8, 16, QChar('0')).arg(offset));
+                ConsoleWrite(QString("[IPC]DEBUG size    0x%1 (%2)").arg(size, 8, 16, QChar('0')).arg(size));
+                ConsoleSync();
+            }
+            else
+            {
+                PERROR(QString("Invalid texture property: %1\n").arg(texProperty.name));
+                PINFO(QString("Unknown texture property type: %1\n").arg(texProperty.type));
+                PDEBUG(QString(" => Address 0x%1 (%2)\n").arg(data_p, 8, 16, QChar('0')).arg(data_p));
+                PDEBUG(QString(" => Offset  0x%1 (%2)\n").arg(offset, 8, 16, QChar('0')).arg(offset));
+                PDEBUG(QString(" => Size    0x%1 (%2)\n").arg(size, 8, 16, QChar('0')).arg(size));
+            }
+
+            CRASH_MSG(err_str.c_str());
+        }
 
         nextOffset = valueRawPos + size;
     }
